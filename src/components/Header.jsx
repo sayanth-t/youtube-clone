@@ -4,17 +4,24 @@ import { FaPlus } from 'react-icons/fa6';
 import { IoIosNotificationsOutline } from 'react-icons/io';
 import { CgProfile } from 'react-icons/cg';
 import { CiSearch } from 'react-icons/ci';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toggleSideBar } from '../utils/appSlice';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { GrClose } from "react-icons/gr";
+import { setCaches } from '../utils/searchSlice';
 
 const Header = () => {
 
   const [ searchQuery , setSearchQuery ] = useState("") ;
   const [ searchSuggestion , setsearchSuggestion ] = useState([]) ;
 
+  // shwoing and hiding suggestions
+  const [showSuggestions,setShowSuggestions] = useState(false) ;
+
+  const cache = useSelector( (state)=> state.search ) ;
+
+  
   const dispatch = useDispatch();
 
   const handleSideBar = (e) => {
@@ -27,31 +34,32 @@ const Header = () => {
       const res = await axios.get(YT_SEARCH_SUGGESTION_API+searchQuery) ;
       setsearchSuggestion(res.data[1]) ;
 
+      // adding to serach cach
+      dispatch(setCaches({ [searchQuery] : res.data[1] }))
+
     } catch (err) {
       console.log(err.message)
     }
   }
 
-  const handleClickOutside = () => {
-    try {
-      setsearchSuggestion([]) ;
-    } catch (err) {
-      console.log(err.message) ;
-    }
-  }
 
   useEffect(()=>{
-    const suggestinTimer = setTimeout(()=>getSuggestinos(),200) ;
+    const suggestinTimer = setTimeout(()=>{
+      if(cache[searchQuery]){
+        setsearchSuggestion(cache[searchQuery]) ;
+      }
+      else{
+        getSuggestinos() ;
+      }
+    },200) ;
 
-    document.addEventListener("mousedown",handleClickOutside)
-    
     return ()=> {
       clearTimeout(suggestinTimer) ;
     }
   },[searchQuery])
 
   return (
-    <div className="w-full flex flex-wrap justify-between items-center px-4 sm:px-6 lg:px-10 py-3 gap-4 bg-white shadow-md mb-5">
+    <div className="w-full flex flex-wrap justify-between items-center px-4 sm:px-6 lg:px-10 py-3 gap-4 bg-white shadow-md mb-5 fixed z-1">
 
       {/* Left Section */}
       <div className="flex items-center gap-3">
@@ -75,7 +83,9 @@ const Header = () => {
             placeholder="Search"
             className="w-full border border-slate-300 rounded-l-full px-4 pr-10 py-2 text-sm sm:text-base focus:outline-none"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value) }
+            onFocus={()=> setShowSuggestions(true)} 
+            onBlur={()=> setShowSuggestions(false)}        
           />
 
           {/* Close Icon */}
@@ -93,7 +103,7 @@ const Header = () => {
         </div>
 
         {/* Suggestions Dropdown */}
-        { searchSuggestion.length !== 0 && (
+        { showSuggestions  && searchSuggestion.length !== 0 && (
           <div className="absolute top-full left-0 w-full bg-white border border-gray-200 rounded-md shadow-md mt-1 z-10">
             { searchSuggestion
                 .map((suggestion, index) => (

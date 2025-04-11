@@ -4,7 +4,7 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 const SideBar = () => {
     return (
-        <div className="flex flex-col w-48 items-center h-screen ">
+        <div className="flex flex-col w-48 items-center h-screen mt-20 ">
             {/* home , short ,subscriptions short links */}
             <div >
                 <ul className="space-y-2">

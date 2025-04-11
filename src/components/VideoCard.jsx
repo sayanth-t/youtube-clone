@@ -5,9 +5,9 @@ const VideoCard = ({videoInfo}) => {
     const {viewCount} = videoInfo.statistics ;
 
     const thumbnail = thumbnails.maxres?.url 
-               || videoInfo.thumbnails.high?.url 
-               || videoInfo.thumbnails.medium?.url 
-               || videoInfo.thumbnails.default?.url; 
+               || videoInfo?.thumbnails?.high?.url 
+               || videoInfo?.thumbnails?.medium?.url 
+               || videoInfo?.thumbnails?.default?.url; 
 
     return (
         <div className="w-full sm:w-60 md:w-sm lg:w-sm flex flex-col gap-2 cursor-pointer">

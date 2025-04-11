@@ -35,7 +35,7 @@ const VideoContainer = () => {
       },[]) 
 
     return (
-        <div className="px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8 mt-20">
             {/* button list */}
             <div className="flex gap-10 mb-6">
                 {buttonMenus.map((buttonData, index) => (
