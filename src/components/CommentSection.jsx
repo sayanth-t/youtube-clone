@@ -1,4 +1,23 @@
+import { comments } from "../utils/constants";
+import CommentCard from "./CommentCard";
+
+
 const CommentSection = () => {
+
+  const CommentList = ({ comments }) => {
+
+    return ( comments.map((comment,index)=> (
+       <div>
+          <CommentCard key={index} data={comment}/>
+          <div className='ml-5 border-l-2 border-slate-200'>
+            <CommentList comments={comment.replies}/>
+          </div>
+          
+       </div>
+    )) )
+
+  }
+
   return (
     <div>
       <h3 className="text-lg font-semibold mb-4">Comments</h3>
@@ -19,14 +38,7 @@ const CommentSection = () => {
 
       {/* Placeholder Comments */}
       <div className="space-y-4">
-        <div>
-          <p className="text-sm font-semibold">User One</p>
-          <p className="text-sm text-gray-700">Awesome video! 🔥</p>
-        </div>
-        <div>
-          <p className="text-sm font-semibold">User Two</p>
-          <p className="text-sm text-gray-700">Thanks for the info!</p>
-        </div>
+        <CommentList comments={comments}/>
       </div>
     </div>
   );
