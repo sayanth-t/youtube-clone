@@ -23,7 +23,7 @@ export const YT_SEARCH_SUGGESTION_API =
   'http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=';
 
 
-
+export const LIVE_COMMENT_COUNT = 10
 
 // comments DATA
 export const comments = [

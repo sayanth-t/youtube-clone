@@ -4,11 +4,13 @@ import { useEffect, useState} from 'react';
 import { useSearchParams } from 'react-router-dom';import axios from 'axios';
 import { API_KEY, YT_BASE_URL } from '../utils/constants';
 import CommentSection from './CommentSection';
+import LiveChat from './LiveChat';
 ;
 
 const WatchPage = () => {
   const [searchParams] = useSearchParams();
   const [videoInfo,setVideoInfo] = useState("");
+  const [isLive] = useState(true)
   const dispatch = useDispatch();
   const hideSideBar = () => {
     dispatch(closeSideBar());
@@ -25,7 +27,6 @@ const WatchPage = () => {
     }
   }
 
-  
   const { channelTitle , description , title }= videoInfo ;
   
   useEffect(() => {
@@ -35,6 +36,7 @@ const WatchPage = () => {
 
   return (
     <div className="flex flex-col lg:flex-row p-4 px-20 gap-6">
+
     {/* Video Info */}
     <div className="flex-1">
       <div className="w-full aspect-video mb-4">
@@ -96,12 +98,16 @@ const WatchPage = () => {
   
     {/* Sidebar for Suggested Videos (optional) */}
     <div className="w-full lg:w-[400px]">
-      <div className="space-y-4">
+      {
+        isLive ? <div>
+          <LiveChat/>
+        </div> : <div className="space-y-4">
         <div className="h-24 bg-gray-200 rounded-lg animate-pulse" />
         <div className="h-24 bg-gray-200 rounded-lg animate-pulse" />
         <div className="h-24 bg-gray-200 rounded-lg animate-pulse" />
         {/* Replace with actual suggested videos */}
       </div>
+      }
     </div>
   </div>
   
